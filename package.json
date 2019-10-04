@@ -1,0 +1,9 @@
+{
+  "name": "congklak",
+  "version": "1.0.0",
+  "description": "artificial intelligence for congklak",
+  "main": "index.js",
+  "repository": "git@github.com:pikacerdas/congklak.git",
+  "author": "",
+  "license": "MIT"
+}
