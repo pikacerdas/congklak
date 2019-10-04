@@ -1,10 +1,20 @@
-node_modules/
+ 
+# OS X
+.DS_Store*
+Icon?
+._*
 
-build/
-public/
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
-.nyc_output/
-coverage/
-
-*.env
+# npm
+node_modules
 *.log
+*.gz
+.nyc_output
+coverage
+
+# publish to npm
+/lib/

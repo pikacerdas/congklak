@@ -2,8 +2,30 @@
   "name": "congklak",
   "version": "1.0.0",
   "description": "artificial intelligence for congklak",
-  "main": "index.js",
-  "repository": "git@github.com:pikacerdas/congklak.git",
+  "main": "lib/index.js",
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:pikacerdas/congklak.git"
+  },
+  "scripts": {
+    "test": "jest --runInBand",
+    "test:lint": "eslint src/*.js test/*.js",
+    "precommit": "yarn test:lint && yarn test",
+    "prepublish": "node_modules/babel-cli/bin/babel.js src --out-dir lib"
+  },
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1",
+    "jest": "^24.9.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.6.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.3",
+    "husky": "^2.3.0"
+  }
 }
