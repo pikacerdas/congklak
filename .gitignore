@@ -15,6 +15,3 @@ node_modules
 *.gz
 .nyc_output
 coverage
-
-# publish to npm
-/lib/
