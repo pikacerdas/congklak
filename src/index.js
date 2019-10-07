@@ -9,6 +9,8 @@ const AI_POINT_INDEX = 15;
 let houses = [];
 let turn = PLAYER;
 
+let stateGrab = 0;
+
 const isPoint = index => index === PLAYER_POINT_INDEX || index === AI_POINT_INDEX;
 const isValidIndex = index => index >= 0 && index <= MAX_HOUSE;
 
@@ -31,3 +33,37 @@ export const play = index => {
 export const getState = () => houses.slice();
 
 export const getTurn = () => turn;
+
+export const nextStep = () => {
+
+  houses[count+1]+=1;
+	stateGrab -= 1;
+  count +=1;
+  
+}
+
+export const test_loop = () => {
+
+  while (stateGrab !== 0){
+	
+    console.log(stateGrab)
+    
+    if (stateGrab === 1 && houses[(count+houses[count])%16] === 0){
+      
+      break;
+    }
+    
+    else if (stateGrab === 1 && houses[(count+houses[count])%16] !== 0){
+      
+      stateGrab+=houses[(count+houses[count])%16];
+      console.log(stateGrab)
+    }
+    
+    else{
+      
+      nextStep();
+      console.log(houses);
+    }
+  }
+
+}
