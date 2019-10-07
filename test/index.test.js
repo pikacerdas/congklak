@@ -1,6 +1,6 @@
 import * as congklak from '../src/index';
 
-describe('init the game', () => {
+describe('start the game', () => {
   const initialState = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
 
   beforeAll(() => {
@@ -23,12 +23,12 @@ describe('init the game', () => {
   });
 });
 
-describe('start game without first turn', () => {
+describe('start game on second turn', () => {
   beforeAll(() => {
     congklak.init(false);
   });
 
-  test('should not get first turn', () => {
+  test('user should not get first turn', () => {
     expect(congklak.getTurn()).toEqual(congklak.AI);
   });
 });

@@ -10,6 +10,7 @@ let houses = [];
 let turn = PLAYER;
 
 const isPoint = index => index === PLAYER_POINT_INDEX || index === AI_POINT_INDEX;
+const isValidIndex = index => 0 <= index && index <= MAX_HOUSE;
 
 export const init = (firstTurn = true) => {
   houses = [];
@@ -19,6 +20,12 @@ export const init = (firstTurn = true) => {
   }
 
   turn = firstTurn ? PLAYER : AI;
+};
+
+export const play = index => {
+  if (!isValidIndex(index)) {
+    throw new Error('Invalid house');
+  }
 };
 
 export const getState = () => houses.slice();
