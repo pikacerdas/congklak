@@ -8,15 +8,11 @@ const AI_POINT_INDEX = 15;
 
 let houses = [];
 let turn = PLAYER;
+let currentPos = 0;
+let grabSeed = 0;
 
 const isPoint = index => index === PLAYER_POINT_INDEX || index === AI_POINT_INDEX;
 const isValidIndex = index => index >= 0 && index <= MAX_HOUSE;
-
-
-let boardState = init(true);
-let currentPos = 0; // position still hardcode for test
-let grabSeed = boardState[currentPos%16];
-boardState[currentPos%16] = 0;
 
 export const init = (firstTurn = true) => {
   houses = [];
@@ -28,28 +24,28 @@ export const init = (firstTurn = true) => {
   turn = firstTurn ? PLAYER : AI;
 };
 
+export const getState = () => houses.slice();
 
 export const nextState = () => {
-  boardState[(currentPos+1)%16] += 1;
-  currentPos+=1;
-  grabSeed-=1;
-}
+  if (grabSeed === 0) {
+    return null;
+  }
+
+  houses[(currentPos + 1) % MAX_HOUSE] += 1;
+  currentPos += 1;
+  grabSeed -= 1;
+
+  return getState();
+};
 
 export const play = index => {
   if (!isValidIndex(index)) {
     throw new Error('Invalid house');
   }
 
-  while(grabSeed!==0){
-    getNextState();
-    if (grabSeed===0 && boardState[currentPos%16]!==1){
-      grabSeed = boardState[currentPos%16];
-      boardState[currentPos%16] = 0;
-    }
-  }
-
+  currentPos = index;
+  grabSeed = houses[currentPos];
+  houses[currentPos] = 0;
 };
-
-export const getState = () => houses.slice();
 
 export const getTurn = () => turn;

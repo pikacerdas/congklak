@@ -32,3 +32,25 @@ describe('start game on second turn', () => {
     expect(congklak.getTurn()).toEqual(congklak.AI);
   });
 });
+
+describe('play the game', () => {
+  beforeAll(() => {
+    congklak.init();
+  });
+
+  test('seed should move', () => {
+    congklak.play(1);
+
+    expect(congklak.nextState()).toEqual([7, 0, 8, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 8, 7, 7, 7, 7, 7, 7, 0]);
+  });
+
+  test('nextState should return null after player turn', () => {
+    expect(congklak.nextState()).toEqual(null);
+  });
+});
