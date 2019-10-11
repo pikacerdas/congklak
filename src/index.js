@@ -12,7 +12,7 @@ let currentPos = 0;
 let grabSeed = 0;
 
 const isPoint = index => index === PLAYER_POINT_INDEX || index === AI_POINT_INDEX;
-const isValidIndex = index => index >= 0 && index <= MAX_HOUSE;
+const isValidIndex = index => index >= 0 && index < PLAYER_POINT_INDEX;
 
 export const init = (firstTurn = true) => {
   houses = [];
@@ -40,7 +40,7 @@ export const nextState = () => {
 
 export const play = index => {
   if (!isValidIndex(index)) {
-    throw new Error('Invalid house');
+    throw new Error('Invalid move');
   }
 
   currentPos = index;

@@ -38,6 +38,12 @@ describe('play the game', () => {
     congklak.init();
   });
 
+  test('throw error when player pick enemy house or point', () => {
+    for (let i = 7; i < 16; i += 1) {
+      expect(() => congklak.play(i)).toThrow('Invalid move');
+    }
+  });
+
   test('seed should move', () => {
     congklak.play(1);
 
