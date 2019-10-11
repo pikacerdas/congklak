@@ -1,5 +1,9 @@
+import aiMove from './ai';
+
 export const PLAYER = 0;
-export const AI = 1;
+export const PLAYER_MOVING = 1;
+export const AI = 2;
+export const AI_MOVING = 3;
 
 const MAX_HOUSE = 16;
 const SEED_PER_HOUSE = 7;
@@ -26,14 +30,39 @@ export const init = (firstTurn = true) => {
 
 export const getState = () => houses.slice();
 
+const switchTurn = () => {
+  turn = turn === PLAYER || turn === PLAYER_MOVING ? AI : PLAYER;
+};
+
+const grab = index => {
+  currentPos = index;
+  grabSeed = houses[currentPos];
+  houses[currentPos] = 0;
+};
+
+const aiPlay = () => {
+  turn = AI_MOVING;
+
+  grab(aiMove());
+};
+
 export const nextState = () => {
-  if (grabSeed === 0) {
+  if (turn === PLAYER) {
+    return null;
+  }
+
+  if (turn === AI) {
+    aiPlay();
     return null;
   }
 
   houses[(currentPos + 1) % MAX_HOUSE] += 1;
   currentPos += 1;
   grabSeed -= 1;
+
+  if (grabSeed === 0) {
+    switchTurn();
+  }
 
   return getState();
 };
@@ -43,9 +72,13 @@ export const play = index => {
     throw new Error('Invalid move');
   }
 
-  currentPos = index;
-  grabSeed = houses[currentPos];
-  houses[currentPos] = 0;
+  if (turn !== PLAYER) {
+    throw new Error("You can't move at this moment");
+  }
+
+  turn = PLAYER_MOVING;
+
+  grab(index);
 };
 
 export const getTurn = () => turn;

@@ -44,19 +44,45 @@ describe('play the game', () => {
     }
   });
 
-  test('seed should move', () => {
+  test('turn should be PLAYER_MOVING', () => {
     congklak.play(1);
 
+    expect(congklak.getTurn()).toEqual(congklak.PLAYER_MOVING);
+  });
+
+  test('seed should move (1)', () => {
     expect(congklak.nextState()).toEqual([7, 0, 8, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
     expect(congklak.nextState()).toEqual([7, 0, 8, 8, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
     expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
     expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+  });
+
+  test("player can't move when nextState is not null", () => {
+    expect(() => congklak.play(0)).toThrow("You can't move at this moment");
+  });
+
+  test('seed should move (2)', () => {
     expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
     expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 7, 7, 7, 7, 7, 7, 7, 0]);
     expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 8, 7, 7, 7, 7, 7, 7, 0]);
   });
 
   test('nextState should return null after player turn', () => {
+    expect(congklak.nextState()).toEqual(null);
+  });
+
+  test('turn should be AI_MOVING', () => {
+    expect(congklak.getTurn()).toEqual(congklak.AI_MOVING);
+  });
+
+  test('[TEMPORARY] AI pick index 11', () => {
+    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 8, 7, 7, 0, 8, 7, 7, 0]);
+    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 8, 7, 7, 0, 8, 8, 7, 0]);
+    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 8, 7, 7, 0, 8, 8, 8, 0]);
+    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 8, 7, 7, 0, 8, 8, 8, 1]);
+    expect(congklak.nextState()).toEqual([8, 0, 8, 8, 8, 8, 8, 1, 8, 7, 7, 0, 8, 8, 8, 1]);
+    expect(congklak.nextState()).toEqual([8, 1, 8, 8, 8, 8, 8, 1, 8, 7, 7, 0, 8, 8, 8, 1]);
+    expect(congklak.nextState()).toEqual([8, 1, 9, 8, 8, 8, 8, 1, 8, 7, 7, 0, 8, 8, 8, 1]);
     expect(congklak.nextState()).toEqual(null);
   });
 });
