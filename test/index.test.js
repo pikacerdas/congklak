@@ -74,15 +74,4 @@ describe('play the game', () => {
   test('turn should be AI_MOVING', () => {
     expect(congklak.getTurn()).toEqual(congklak.AI_MOVING);
   });
-
-  test('[TEMPORARY] AI pick index 11', () => {
-    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 8, 7, 7, 0, 8, 7, 7, 0]);
-    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 8, 7, 7, 0, 8, 8, 7, 0]);
-    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 8, 7, 7, 0, 8, 8, 8, 0]);
-    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 8, 7, 7, 0, 8, 8, 8, 1]);
-    expect(congklak.nextState()).toEqual([8, 0, 8, 8, 8, 8, 8, 1, 8, 7, 7, 0, 8, 8, 8, 1]);
-    expect(congklak.nextState()).toEqual([8, 1, 8, 8, 8, 8, 8, 1, 8, 7, 7, 0, 8, 8, 8, 1]);
-    expect(congklak.nextState()).toEqual([8, 1, 9, 8, 8, 8, 8, 1, 8, 7, 7, 0, 8, 8, 8, 1]);
-    expect(congklak.nextState()).toEqual(null);
-  });
 });
