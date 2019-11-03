@@ -1,5 +1,3 @@
-import aiMove from './ai';
-
 export const PLAYER = 0;
 export const PLAYER_MOVING = 1;
 export const AI = 2;
