@@ -42,8 +42,7 @@ const grab = index => {
 
 const aiPlay = () => {
   turn = AI_MOVING;
-
-  grab(aiMove());
+  return 12;
 };
 
 export const nextState = () => {
