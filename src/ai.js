@@ -2,8 +2,9 @@ const MAX_HOUSE = 16;
 const PLAYER_POINT_INDEX = 7;
 const ENEMY_POINT_INDEX = 15;
 const ENEMY_OPPOSITE = [-1, -1, -1, -1, -1, -1, -1, -1, 6, 5, 4, 3, 2, 1, 0, -1];
+const INF = 7 * 14;
 
-const move = (state, grabHouse) => {
+export const move = (state, grabHouse) => {
   const currentState = state;
   let oneRound = false;
 
@@ -44,4 +45,19 @@ const move = (state, grabHouse) => {
   return currentState;
 };
 
-export default move;
+export const bestMove = (state, depth) => {
+  let holeIndex;
+  let playerPoint = -INF;
+  let enemyPoint = INF;
+  for (let i = 0; i < PLAYER_POINT_INDEX; i += 1) {
+    if (depth === 0) {
+      const newState = move(state, i);
+      if (newState[PLAYER_POINT_INDEX] > playerPoint) {
+        holeIndex = i;
+        playerPoint = newState[PLAYER_POINT_INDEX];
+        enemyPoint = newState[ENEMY_POINT_INDEX];
+      }
+    }
+  }
+  return { holeIndex, playerPoint, enemyPoint };
+};

@@ -1,4 +1,4 @@
-import move from '../src/ai';
+import { move } from '../src/ai';
 
 describe('move the seeds from choosen index', () => {
   test('move from player point index', () => {
