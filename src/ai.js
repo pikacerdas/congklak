@@ -17,29 +17,28 @@ export const move = (state, grabHouse) => {
   currentState[grabHouse] = 0;
 
   while (grabSeed > 0) {
-    if (currentPos === PLAYER_POINT_INDEX) {
-      currentPos += 1;
+    if (currentPos === ENEMY_POINT_INDEX) {
+      oneRound = true;
+      currentPos = 0;
       continue;
     }
 
-    if (currentPos !== ENEMY_POINT_INDEX && grabSeed === 1 && currentState[currentPos] !== 0) {
+    if (currentPos !== PLAYER_POINT_INDEX && grabSeed === 1 && currentState[currentPos] !== 0) {
       grabSeed += currentState[currentPos];
       currentState[currentPos] = 0;
     } else {
       currentState[currentPos] += 1;
       grabSeed -= 1;
     }
+
     currentPos = (currentPos + 1) % MAX_HOUSE;
-    if (currentPos === grabHouse) {
-      oneRound = true;
-    }
   }
 
-  if (oneRound && ENEMY_OPPOSITE[currentPos] !== -1) {
-    if (currentState[ENEMY_OPPOSITE[currentPos]] !== 0) {
-      currentState[ENEMY_POINT_INDEX] += currentState[ENEMY_OPPOSITE[currentPos]];
-      currentState[ENEMY_OPPOSITE[currentPos]] = 0;
-    }
+  currentPos -= 1;
+  if (oneRound && currentPos < PLAYER_POINT_INDEX && currentState[currentPos] === 1) {
+    currentState[PLAYER_POINT_INDEX] += currentState[14 - currentPos] + 1;
+    currentState[14 - currentPos] = 0;
+    currentState[currentPos] = 0;
   }
 
   return currentState;
