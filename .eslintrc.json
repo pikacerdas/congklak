@@ -15,6 +15,8 @@
   },
   "rules": {
     "arrow-parens": [2, "as-needed"],
-    "no-continue": "off"
+    "no-continue": "off",
+    "max-len": "off",
+    "linebreak-style": "off"
   }
 }

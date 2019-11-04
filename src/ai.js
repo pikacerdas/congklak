@@ -7,11 +7,7 @@ const move = (state, grabHouse) => {
   const currentState = state;
   let oneRound = false;
 
-  if (
-    currentState[grabHouse] === 0
-    || grabHouse === PLAYER_POINT_INDEX
-    || grabHouse === ENEMY_POINT_INDEX
-  ) {
+  if (currentState[grabHouse] === 0 || grabHouse === PLAYER_POINT_INDEX || grabHouse === ENEMY_POINT_INDEX) {
     return currentState;
   }
 

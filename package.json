@@ -12,7 +12,7 @@
   "scripts": {
     "test": "jest --runInBand",
     "test:lint": "eslint src/*.js test/*.js",
-    "precommit": "yarn test:lint && yarn test",
+    "precommit": "npm run test:lint && npm run test",
     "prepublish": "babel --plugins=transform-es2015-modules-commonjs src --out-dir lib"
   },
   "dependencies": {},
