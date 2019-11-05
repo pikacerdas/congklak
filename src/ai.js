@@ -57,6 +57,14 @@ export const bestMove = (state, depth) => {
         playerPoint = newState[PLAYER_POINT_INDEX];
         enemyPoint = newState[ENEMY_POINT_INDEX];
       }
+    } else {
+      const nextState = move(state, i); // 8 index pertama taro di akhir
+      const temp = bestMove(nextState, depth - 1); // swap EnemyPoint dan PlayerPoint
+      if (temp.playerPoint > playerPoint) {
+        holeIndex = i;
+        playerPoint = temp.playerPoint;
+        enemyPoint = temp.enemyPoint;
+      }
     }
   }
   return { holeIndex, playerPoint, enemyPoint };
