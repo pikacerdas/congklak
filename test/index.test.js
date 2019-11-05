@@ -34,6 +34,8 @@ describe('start game on second turn', () => {
 });
 
 describe('play the game', () => {
+  let stateStream;
+
   beforeAll(() => {
     congklak.init();
   });
@@ -45,33 +47,94 @@ describe('play the game', () => {
   });
 
   test('turn should be PLAYER_MOVING', () => {
-    congklak.play(1);
+    stateStream = congklak.play(1);
 
     expect(congklak.getTurn()).toEqual(congklak.PLAYER_MOVING);
   });
 
   test('seed should move (1)', () => {
-    expect(congklak.nextState()).toEqual([7, 0, 8, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
-    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
-    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
-    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stateStream.next().value).toEqual([7, 0, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stateStream.next().value).toEqual([7, 0, 8, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
   });
 
-  test("player can't move when nextState is not null", () => {
+  test("player can't move when stateStream value is not undefined", () => {
     expect(() => congklak.play(0)).toThrow("You can't move at this moment");
   });
 
   test('seed should move (2)', () => {
-    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
-    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 7, 7, 7, 7, 7, 7, 7, 0]);
-    expect(congklak.nextState()).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 8, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 7, 7, 7, 7, 7, 0]);
+    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 7, 7, 7, 7, 0]);
+    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 7, 7, 7, 0]);
+    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 7, 7, 0]);
+    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 8, 7, 0]);
+    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 8, 8, 0]);
+    expect(stateStream.next().value).toEqual([8, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 8, 8, 0]);
+    expect(stateStream.next().value).toEqual([8, 1, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 8, 8, 0]);
+    expect(stateStream.next().value).toEqual([8, 0, 8, 8, 8, 8, 8, 10, 0, 8, 8, 8, 8, 0, 8, 0]);
   });
 
-  test('nextState should return null after player turn', () => {
-    expect(congklak.nextState()).toEqual(null);
+  test('stateStream value should be undefined after player turn', () => {
+    expect(stateStream.next().done).toEqual(true);
+    expect(stateStream.next().value).toEqual(undefined);
   });
 
-  test('turn should be AI_MOVING', () => {
-    expect(congklak.getTurn()).toEqual(congklak.AI_MOVING);
+  test('turn should be AI', () => {
+    expect(congklak.getTurn()).toEqual(congklak.AI);
+  });
+
+  test('AI should choose index 11', () => {
+    stateStream = congklak.aiPlay();
+
+    expect(stateStream.next().value).toEqual([8, 0, 8, 8, 8, 8, 8, 10, 0, 8, 8, 0, 8, 0, 8, 0]);
+  });
+});
+
+describe('move the seeds from choosen index', () => {
+  test('move from player point index', () => {
+    const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
+    const expected = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
+
+    expect(congklak.moveUntilEnd(state, 7)).toEqual(expected);
+  });
+
+  test('move from enemy point index', () => {
+    const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
+    const expected = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
+
+    expect(congklak.moveUntilEnd(state, 15)).toEqual(expected);
+  });
+
+  test('move ended in player point house', () => {
+    const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
+    const expected = [0, 8, 8, 8, 8, 8, 8, 1, 7, 7, 7, 7, 7, 7, 7, 0];
+
+    expect(congklak.moveUntilEnd(state, 0)).toEqual(expected);
+  });
+
+  test('move ended in player side but cannot take opposite house', () => {
+    const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
+    const expected = [8, 8, 8, 0, 8, 8, 8, 10, 8, 8, 0, 0, 8, 8, 8, 0];
+
+    expect(congklak.moveUntilEnd(state, 3)).toEqual(expected);
+  });
+
+  test('move ended in player side and take seeds from opposite house to point', () => {
+    const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
+    const expected = [8, 8, 8, 8, 8, 0, 8, 10, 8, 0, 8, 8, 0, 8, 8, 0];
+
+    expect(congklak.moveUntilEnd(state, 5)).toEqual(expected);
+  });
+
+  test('move ended in player point house', () => {
+    const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
+    const expected = [8, 8, 8, 8, 8, 8, 0, 10, 0, 8, 8, 8, 8, 0, 8, 0];
+
+    expect(congklak.moveUntilEnd(state, 6)).toEqual(expected);
   });
 });

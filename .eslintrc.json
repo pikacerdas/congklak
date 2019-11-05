@@ -17,6 +17,7 @@
     "arrow-parens": [2, "as-needed"],
     "no-continue": "off",
     "max-len": "off",
-    "linebreak-style": "off"
+    "linebreak-style": "off",
+    "prefer-destructuring": "off"
   }
 }
