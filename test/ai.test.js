@@ -13,27 +13,28 @@ describe('move the seeds from choosen index', () => {
     expect(move(state, 15)).toEqual(expected);
   });
 
-  test('move ended in enemy side', () => {
+  test('move ended in player point house', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
-    const expected = [7, 7, 7, 7, 7, 7, 7, 0, 0, 8, 8, 8, 8, 8, 8, 1];
-    expect(move(state, 8)).toEqual(expected);
+    const expected = [0, 8, 8, 8, 8, 8, 8, 1, 7, 7, 7, 7, 7, 7, 7, 0];
+    expect(move(state, 0)).toEqual(expected);
   });
 
   test('move ended in player side but cannot take opposite house', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
-    const expected = [8, 8, 0, 8, 8, 8, 8, 0, 8, 8, 8, 1, 8, 8, 8, 1];
-    expect(move(state, 11)).toEqual(expected);
+    const expected = [8, 8, 8, 0, 8, 8, 8, 10, 8, 8, 0, 0, 8, 8, 8, 0];
+
+    expect(move(state, 3)).toEqual(expected);
   });
 
   test('move ended in player side and take seeds from opposite house to point', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
-    const expected = [0, 8, 8, 8, 0, 8, 8, 0, 8, 8, 8, 8, 8, 1, 8, 9];
-    expect(move(state, 13)).toEqual(expected);
+    const expected = [8, 8, 8, 8, 8, 0, 8, 10, 8, 0, 8, 8, 0, 8, 8, 0];
+    expect(move(state, 5)).toEqual(expected);
   });
 
   test('move ended in player point house', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
-    const expected = [8, 8, 8, 8, 8, 0, 8, 0, 8, 8, 8, 8, 8, 8, 1, 1];
-    expect(move(state, 14)).toEqual(expected);
+    const expected = [8, 8, 8, 8, 8, 8, 0, 10, 0, 8, 8, 8, 8, 0, 8, 0];
+    expect(move(state, 6)).toEqual(expected);
   });
 });
