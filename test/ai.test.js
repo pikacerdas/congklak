@@ -21,7 +21,8 @@ describe('move the seeds from choosen index', () => {
 
   test('move ended in player side but cannot take opposite house', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
-    const expected = [8, 8, 8, 1, 8, 8, 8, 1, 8, 8, 0, 8, 8, 8, 8, 0];
+    const expected = [8, 8, 8, 0, 8, 8, 8, 10, 8, 8, 0, 0, 8, 8, 8, 0];
+
     expect(move(state, 3)).toEqual(expected);
   });
 
@@ -33,7 +34,7 @@ describe('move the seeds from choosen index', () => {
 
   test('move ended in player point house', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
-    const expected = [8, 8, 8, 8, 8, 8, 1, 1, 8, 8, 8, 8, 8, 0, 8, 0];
+    const expected = [8, 8, 8, 8, 8, 8, 0, 10, 0, 8, 8, 8, 8, 0, 8, 0];
     expect(move(state, 6)).toEqual(expected);
   });
 });

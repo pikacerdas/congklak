@@ -1,7 +1,6 @@
 const MAX_HOUSE = 16;
 const PLAYER_POINT_INDEX = 7;
 const ENEMY_POINT_INDEX = 15;
-const ENEMY_OPPOSITE = [-1, -1, -1, -1, -1, -1, -1, -1, 6, 5, 4, 3, 2, 1, 0, -1];
 const INF = 7 * 14;
 
 export const move = (state, grabHouse) => {
