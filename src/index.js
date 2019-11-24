@@ -45,7 +45,7 @@ function* move(state, grabHouse, realMove = false, swap = false) {
   let grabSeed = currentState[grabHouse];
   currentState[grabHouse] = 0;
 
-  yield currentState;
+  yield { state: currentState, seed: grabSeed };
 
   while (grabSeed > 0) {
     if (currentPos === ENEMY_POINT_INDEX) {
@@ -63,7 +63,7 @@ function* move(state, grabHouse, realMove = false, swap = false) {
     }
 
     currentPos = (currentPos + 1) % MAX_HOUSE;
-    yield currentState;
+    yield { state: currentState, seed: grabSeed };
   }
 
   currentPos -= 1;
@@ -126,7 +126,7 @@ export function* aiPlay() {
   const index = bestMove(swappedState, 3).holeIndex;
   const stateStream = move(swappedState, index, true, true);
   for (let tmp = stateStream.next().value; tmp !== undefined; tmp = stateStream.next().value) {
-    yield swapState(tmp);
+    yield swapState(tmp.state);
   }
 }
 
