@@ -34,7 +34,7 @@ describe('start game on second turn', () => {
 });
 
 describe('play the game', () => {
-  let stateStream;
+  let stream;
 
   beforeAll(() => {
     congklak.init();
@@ -47,17 +47,17 @@ describe('play the game', () => {
   });
 
   test('turn should be PLAYER_MOVING', () => {
-    stateStream = congklak.play(1);
+    stream = congklak.play(1);
 
     expect(congklak.getTurn()).toEqual(congklak.PLAYER_MOVING);
   });
 
   test('seed should move (1)', () => {
-    expect(stateStream.next().value).toEqual([7, 0, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
-    expect(stateStream.next().value).toEqual([7, 0, 8, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
-    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
-    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
-    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stream.next().value.state).toEqual([7, 0, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stream.next().value.state).toEqual([7, 0, 8, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stream.next().value.state).toEqual([7, 0, 8, 8, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stream.next().value.state).toEqual([7, 0, 8, 8, 8, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stream.next().value.state).toEqual([7, 0, 8, 8, 8, 8, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
   });
 
   test("player can't move when stateStream value is not undefined", () => {
@@ -65,23 +65,23 @@ describe('play the game', () => {
   });
 
   test('seed should move (2)', () => {
-    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
-    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 7, 7, 7, 7, 7, 7, 7, 0]);
-    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 7, 7, 7, 7, 7, 7, 0]);
-    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 7, 7, 7, 7, 7, 0]);
-    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 7, 7, 7, 7, 0]);
-    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 7, 7, 7, 0]);
-    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 7, 7, 0]);
-    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 8, 7, 0]);
-    expect(stateStream.next().value).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 8, 8, 0]);
-    expect(stateStream.next().value).toEqual([8, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 8, 8, 0]);
-    expect(stateStream.next().value).toEqual([8, 1, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 8, 8, 0]);
-    expect(stateStream.next().value).toEqual([8, 0, 8, 8, 8, 8, 8, 10, 0, 8, 8, 8, 8, 0, 8, 0]);
+    expect(stream.next().value.state).toEqual([7, 0, 8, 8, 8, 8, 8, 0, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stream.next().value.state).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 7, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stream.next().value.state).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 7, 7, 7, 7, 7, 7, 0]);
+    expect(stream.next().value.state).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 7, 7, 7, 7, 7, 0]);
+    expect(stream.next().value.state).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 7, 7, 7, 7, 0]);
+    expect(stream.next().value.state).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 7, 7, 7, 0]);
+    expect(stream.next().value.state).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 7, 7, 0]);
+    expect(stream.next().value.state).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 8, 7, 0]);
+    expect(stream.next().value.state).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 8, 8, 0]);
+    expect(stream.next().value.state).toEqual([8, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 8, 8, 0]);
+    expect(stream.next().value.state).toEqual([8, 1, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 8, 8, 0]);
+    expect(stream.next().value).toEqual([8, 0, 8, 8, 8, 8, 8, 10, 0, 8, 8, 8, 8, 0, 8, 0]);
   });
 
   test('stateStream value should be undefined after player turn', () => {
-    expect(stateStream.next().done).toEqual(true);
-    expect(stateStream.next().value).toEqual(undefined);
+    expect(stream.next().done).toEqual(true);
+    expect(stream.next().value).toEqual(undefined);
   });
 
   test('turn should be AI', () => {
@@ -89,9 +89,9 @@ describe('play the game', () => {
   });
 
   test('AI should choose index 11', () => {
-    stateStream = congklak.aiPlay();
+    stream = congklak.aiPlay();
 
-    expect(stateStream.next().value).toEqual([8, 0, 8, 8, 8, 8, 8, 10, 0, 8, 8, 0, 8, 0, 8, 0]);
+    expect(stream.next().value).toEqual([8, 0, 8, 8, 8, 8, 8, 10, 0, 8, 8, 0, 8, 0, 8, 0]);
   });
 });
 
