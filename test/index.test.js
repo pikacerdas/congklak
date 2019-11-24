@@ -88,10 +88,9 @@ describe('play the game', () => {
     expect(congklak.getTurn()).toEqual(congklak.AI);
   });
 
-  test('AI should choose index 11', () => {
+  test('AI should choose index 6', () => {
     stream = congklak.aiPlay();
-
-    expect(stream.next().value).toEqual([8, 0, 8, 8, 8, 8, 8, 10, 0, 8, 8, 0, 8, 0, 8, 0]);
+    expect(stream.next().value).toEqual([8, 0, 8, 8, 8, 8, 8, 10, 0, 8, 0, 8, 8, 0, 8, 0]);
   });
 });
 
