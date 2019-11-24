@@ -88,7 +88,7 @@ export function moveUntilEnd(state, grabHouse) {
   return result;
 }
 
-function bestMove(state, depth) {
+function bestMove(state, depth, diffBefore) {
   let holeIndex;
   let playerPoint = -INF;
   let enemyPoint = INF;
@@ -104,7 +104,7 @@ function bestMove(state, depth) {
       }
     } else {
       const nextState = swapState(moveUntilEnd(state, i));
-      const temp = bestMove(nextState, depth - 1);
+      const temp = bestMove(nextState, depth - 1, diff);
       if (temp.enemyPoint - temp.playerPoint > diff) {
         holeIndex = i;
         playerPoint = temp.enemyPoint;
@@ -112,6 +112,7 @@ function bestMove(state, depth) {
       }
     }
     diff = playerPoint - enemyPoint;
+    if (-diff < diffBefore) break;
   }
 
   return { holeIndex, playerPoint, enemyPoint };
@@ -121,7 +122,7 @@ export function* aiPlay() {
   turn = AI_MOVING;
 
   const swappedState = swapState(houses);
-  const index = bestMove(swappedState, 3).holeIndex;
+  const index = bestMove(swappedState, 3, -INF).holeIndex;
   const stateStream = move(swappedState, index, true, true);
   for (let tmp = stateStream.next().value; tmp !== undefined; tmp = stateStream.next().value) {
     yield swapState(tmp);
