@@ -1,7 +1,10 @@
 export const PLAYER = 0;
 export const PLAYER_MOVING = 1;
+export const PLAYER_WIN = 4;
 export const AI = 2;
 export const AI_MOVING = 3;
+export const AI_WIN = 5;
+export const TIE = 6;
 
 const MAX_HOUSE = 16;
 const PLAYER_POINT_INDEX = 7;
@@ -33,6 +36,22 @@ export const getState = () => houses.slice();
 const switchTurn = () => {
   turn = turn === PLAYER || turn === PLAYER_MOVING ? AI : PLAYER;
 };
+
+export function checkWinner(currentState) {
+  const allSeeds = (MAX_HOUSE - 2) * SEED_PER_HOUSE;
+  const allSeedsExceptPoint = allSeeds - currentState[PLAYER_POINT_INDEX] - currentState[ENEMY_POINT_INDEX];
+  if (Math.abs(currentState[PLAYER_POINT_INDEX] - currentState[ENEMY_POINT_INDEX]) > allSeedsExceptPoint) {
+    if (currentState[PLAYER_POINT_INDEX] > currentState[ENEMY_POINT_INDEX]) {
+      return PLAYER_WIN;
+    }
+    return AI_WIN;
+  }
+  if (allSeedsExceptPoint === 0 && currentState[PLAYER_POINT_INDEX] === currentState[ENEMY_POINT_INDEX]) {
+    return TIE;
+  }
+  return -1;
+}
+
 function* move(state, grabHouse, realMove = false, swap = false) {
   const currentState = state.slice();
   let oneRound = false;
@@ -70,6 +89,7 @@ function* move(state, grabHouse, realMove = false, swap = false) {
   }
 
   if (realMove) {
+    checkWinner(currentState);
     switchTurn();
     houses = swap ? swapState(currentState) : currentState;
   }
