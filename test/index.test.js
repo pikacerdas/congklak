@@ -137,3 +137,29 @@ describe('move the seeds from choosen index', () => {
     expect(congklak.moveUntilEnd(state, 6)).toEqual(expected);
   });
 });
+
+describe('check winner', () => {
+  test('no winner', () => {
+    const state = [8, 0, 8, 8, 8, 8, 8, 10, 0, 8, 8, 8, 8, 0, 8, 0];
+
+    expect(congklak.checkWinner(state)).toEqual(-1);
+  });
+
+  test('player wins', () => {
+    const state = [0, 0, 0, 0, 0, 0, 0, 55, 1, 7, 7, 7, 7, 7, 7, 0];
+
+    expect(congklak.checkWinner(state)).toEqual(congklak.PLAYER_WIN);
+  });
+
+  test('AI wins', () => {
+    const state = [1, 7, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0, 55];
+
+    expect(congklak.checkWinner(state)).toEqual(congklak.AI_WIN);
+  });
+
+  test('tie', () => {
+    const state = [0, 0, 0, 0, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 49];
+
+    expect(congklak.checkWinner(state)).toEqual(congklak.TIE);
+  });
+});
