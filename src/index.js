@@ -22,10 +22,6 @@ function swapState(state) {
   return [...state.slice(8, 16), ...state.slice(0, 8)];
 }
 
-function swapPoint({ holeIndex, playerPoint, enemyPoint }) {
-  return { holeIndex, playerPoint: enemyPoint, enemyPoint: playerPoint };
-}
-
 export function init(firstTurn = true) {
   houses = [];
   for (let i = 0; i < MAX_HOUSE; i += 1) {
@@ -60,7 +56,7 @@ function* move(state, grabHouse, realMove = false, swap = false) {
   let grabSeed = currentState[grabHouse];
   currentState[grabHouse] = 0;
 
-  yield currentState;
+  yield { state: currentState, seed: grabSeed };
 
   while (grabSeed > 0) {
     if (currentPos === ENEMY_POINT_INDEX) {
@@ -78,7 +74,7 @@ function* move(state, grabHouse, realMove = false, swap = false) {
     }
 
     currentPos = (currentPos + 1) % MAX_HOUSE;
-    yield currentState;
+    yield { state: currentState, seed: grabSeed };
   }
 
   currentPos -= 1;
@@ -108,28 +104,31 @@ export function moveUntilEnd(state, grabHouse) {
   return result;
 }
 
-function bestMove(state, depth) {
+function bestMove(state, depth, diffBefore) {
   let holeIndex;
   let playerPoint = -INF;
   let enemyPoint = INF;
+  let diff = -INF;
 
   for (let i = 0; i < PLAYER_POINT_INDEX; i += 1) {
     if (depth === 0) {
       const newState = moveUntilEnd(state, i);
-      if (newState[PLAYER_POINT_INDEX] > playerPoint) {
+      if (newState[PLAYER_POINT_INDEX] - newState[ENEMY_POINT_INDEX] > diff) {
         holeIndex = i;
         playerPoint = newState[PLAYER_POINT_INDEX];
         enemyPoint = newState[ENEMY_POINT_INDEX];
       }
     } else {
       const nextState = swapState(moveUntilEnd(state, i));
-      const temp = swapPoint(bestMove(nextState, depth - 1));
-      if (temp.playerPoint > playerPoint) {
+      const temp = bestMove(nextState, depth - 1, diff);
+      if (temp.enemyPoint - temp.playerPoint > diff) {
         holeIndex = i;
-        playerPoint = temp.playerPoint;
-        enemyPoint = temp.enemyPoint;
+        playerPoint = temp.enemyPoint;
+        enemyPoint = temp.playerPoint;
       }
     }
+    diff = playerPoint - enemyPoint;
+    if (-diff < diffBefore) break;
   }
 
   return { holeIndex, playerPoint, enemyPoint };
@@ -139,10 +138,10 @@ export function* aiPlay() {
   turn = AI_MOVING;
 
   const swappedState = swapState(houses);
-  const index = bestMove(swappedState, 3).holeIndex;
+  const index = bestMove(swappedState, 3, -INF).holeIndex;
   const stateStream = move(swappedState, index, true, true);
   for (let tmp = stateStream.next().value; tmp !== undefined; tmp = stateStream.next().value) {
-    yield swapState(tmp);
+    yield swapState(tmp.state);
   }
 }
 
