@@ -76,7 +76,7 @@ describe('play the game', () => {
     expect(stream.next().value.state).toEqual([7, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 8, 8, 0]);
     expect(stream.next().value.state).toEqual([8, 0, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 8, 8, 0]);
     expect(stream.next().value.state).toEqual([8, 1, 8, 8, 8, 8, 8, 1, 0, 8, 8, 8, 8, 8, 8, 0]);
-    expect(stream.next().value).toEqual([8, 0, 8, 8, 8, 8, 8, 10, 0, 8, 8, 8, 8, 0, 8, 0]);
+    expect(stream.next().value.state).toEqual([8, 0, 8, 8, 8, 8, 8, 10, 0, 8, 8, 8, 8, 0, 8, 0]);
   });
 
   test('stateStream value should be undefined after player turn', () => {
