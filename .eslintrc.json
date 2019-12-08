@@ -18,6 +18,8 @@
     "no-continue": "off",
     "max-len": "off",
     "linebreak-style": "off",
-    "prefer-destructuring": "off"
+    "prefer-destructuring": "off",
+    "no-use-before-define": "off",
+    "no-param-reassign": "off"
   }
 }
