@@ -13,7 +13,8 @@
     "test": "jest --runInBand",
     "test:lint": "eslint src/*.js test/*.js",
     "precommit": "npm run test:lint && npm run test",
-    "prepublish": "babel --plugins=transform-es2015-modules-commonjs src --out-dir lib"
+    "prepublish": "babel --plugins=transform-es2015-modules-commonjs src --out-dir lib",
+    "simulation": "babel-node --plugins=transform-es2015-modules-commonjs simulation.js"
   },
   "dependencies": {},
   "devDependencies": {

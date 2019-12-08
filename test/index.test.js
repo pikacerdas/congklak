@@ -99,67 +99,70 @@ describe('move the seeds from choosen index', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
     const expected = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
 
-    expect(congklak.moveUntilEnd(state, 7)).toEqual(expected);
+    expect(congklak.moveUntilEnd(state, 7, false)).toEqual(expected);
   });
 
   test('move from enemy point index', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
     const expected = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
 
-    expect(congklak.moveUntilEnd(state, 15)).toEqual(expected);
+    expect(congklak.moveUntilEnd(state, 15, false)).toEqual(expected);
   });
 
   test('move ended in player point house', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
     const expected = [0, 8, 8, 8, 8, 8, 8, 1, 7, 7, 7, 7, 7, 7, 7, 0];
 
-    expect(congklak.moveUntilEnd(state, 0)).toEqual(expected);
+    expect(congklak.moveUntilEnd(state, 0, true)).toEqual(expected);
   });
 
   test('move ended in player side but cannot take opposite house', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
     const expected = [8, 8, 8, 0, 8, 8, 8, 10, 8, 8, 0, 0, 8, 8, 8, 0];
 
-    expect(congklak.moveUntilEnd(state, 3)).toEqual(expected);
+    expect(congklak.moveUntilEnd(state, 3, true)).toEqual(expected);
   });
 
   test('move ended in player side and take seeds from opposite house to point', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
     const expected = [8, 8, 8, 8, 8, 0, 8, 10, 8, 0, 8, 8, 0, 8, 8, 0];
 
-    expect(congklak.moveUntilEnd(state, 5)).toEqual(expected);
+    expect(congklak.moveUntilEnd(state, 5, true)).toEqual(expected);
   });
 
   test('move ended in player point house', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
     const expected = [8, 8, 8, 8, 8, 8, 0, 10, 0, 8, 8, 8, 8, 0, 8, 0];
 
-    expect(congklak.moveUntilEnd(state, 6)).toEqual(expected);
+    expect(congklak.moveUntilEnd(state, 6, true)).toEqual(expected);
   });
 });
 
 describe('check winner', () => {
   test('no winner', () => {
     const state = [8, 0, 8, 8, 8, 8, 8, 10, 0, 8, 8, 8, 8, 0, 8, 0];
-
-    expect(congklak.checkWinner(state)).toEqual(-1);
+    congklak.checkWinner(state);
+    expect(congklak.getTurn()).toEqual(congklak.AI_MOVING);
   });
 
   test('player wins', () => {
     const state = [0, 0, 0, 0, 0, 0, 0, 55, 1, 7, 7, 7, 7, 7, 7, 0];
 
-    expect(congklak.checkWinner(state)).toEqual(congklak.PLAYER_WIN);
+    congklak.checkWinner(state);
+    expect(congklak.getTurn()).toEqual(congklak.PLAYER_WIN);
   });
 
   test('AI wins', () => {
     const state = [1, 7, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0, 55];
 
-    expect(congklak.checkWinner(state)).toEqual(congklak.AI_WIN);
+    congklak.checkWinner(state);
+    expect(congklak.getTurn()).toEqual(congklak.AI_WIN);
   });
 
   test('tie', () => {
     const state = [0, 0, 0, 0, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 49];
 
-    expect(congklak.checkWinner(state)).toEqual(congklak.TIE);
+    congklak.checkWinner(state);
+    expect(congklak.getTurn()).toEqual(congklak.TIE);
   });
 });
