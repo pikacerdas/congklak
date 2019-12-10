@@ -90,7 +90,7 @@ describe('play the game', () => {
 
   test('AI should choose index 6', () => {
     stream = congklak.aiPlay();
-    expect(stream.next().value.state).toEqual([8, 0, 8, 8, 8, 8, 8, 10, 0, 8, 0, 8, 8, 0, 8, 0]);
+    expect(stream.next().value.state).toEqual([8, 0, 8, 8, 8, 8, 8, 10, 0, 0, 8, 8, 8, 0, 8, 0]);
   });
 });
 
@@ -99,42 +99,42 @@ describe('move the seeds from choosen index', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
     const expected = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
 
-    expect(congklak.moveUntilEnd(state, 7, false)).toEqual(expected);
+    expect(congklak.moveUntilEnd(state, 7, false).state).toEqual(expected);
   });
 
   test('move from enemy point index', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
     const expected = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
 
-    expect(congklak.moveUntilEnd(state, 15, false)).toEqual(expected);
+    expect(congklak.moveUntilEnd(state, 15, false).state).toEqual(expected);
   });
 
   test('move ended in player point house', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
     const expected = [0, 8, 8, 8, 8, 8, 8, 1, 7, 7, 7, 7, 7, 7, 7, 0];
 
-    expect(congklak.moveUntilEnd(state, 0, true)).toEqual(expected);
+    expect(congklak.moveUntilEnd(state, 0, true).state).toEqual(expected);
   });
 
   test('move ended in player side but cannot take opposite house', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
     const expected = [8, 8, 8, 0, 8, 8, 8, 10, 8, 8, 0, 0, 8, 8, 8, 0];
 
-    expect(congklak.moveUntilEnd(state, 3, true)).toEqual(expected);
+    expect(congklak.moveUntilEnd(state, 3, true).state).toEqual(expected);
   });
 
   test('move ended in player side and take seeds from opposite house to point', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
     const expected = [8, 8, 8, 8, 8, 0, 8, 10, 8, 0, 8, 8, 0, 8, 8, 0];
 
-    expect(congklak.moveUntilEnd(state, 5, true)).toEqual(expected);
+    expect(congklak.moveUntilEnd(state, 5, true).state).toEqual(expected);
   });
 
   test('move ended in player point house', () => {
     const state = [7, 7, 7, 7, 7, 7, 7, 0, 7, 7, 7, 7, 7, 7, 7, 0];
     const expected = [8, 8, 8, 8, 8, 8, 0, 10, 0, 8, 8, 8, 8, 0, 8, 0];
 
-    expect(congklak.moveUntilEnd(state, 6, true)).toEqual(expected);
+    expect(congklak.moveUntilEnd(state, 6, true).state).toEqual(expected);
   });
 });
 

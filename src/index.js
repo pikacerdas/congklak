@@ -33,8 +33,14 @@ export function init(firstTurn = true) {
 
 export const getState = () => houses.slice();
 
+const playerCanPlay = state => state.slice(0, 7).some(i => !!i);
+
+const aiCanPlay = state => state.slice(8, 15).some(i => !!i);
+
 const switchTurn = () => {
   turn = turn === PLAYER || turn === PLAYER_MOVING ? AI : PLAYER;
+  if (!playerCanPlay(houses)) turn = AI;
+  if (!aiCanPlay(houses)) turn = PLAYER;
 };
 
 export function checkWinner(currentState) {
@@ -90,13 +96,19 @@ function* move(state, grabHouse, playerOne, realMove = false) {
     currentState[currentPos] = 0;
   }
 
-  if (realMove) {
-    switchTurn();
-    checkWinner(conditionalSwapState(currentState));
-    houses = conditionalSwapState(currentState);
+  let playAgain = false;
+  if (currentPos === PLAYER_POINT_INDEX) {
+    playAgain = true;
   }
 
-  return { state: conditionalSwapState(currentState), seed: grabSeed };
+  if (realMove) {
+    houses = conditionalSwapState(currentState);
+    switchTurn();
+    if (playAgain) switchTurn();
+    checkWinner(conditionalSwapState(currentState));
+  }
+
+  return { state: conditionalSwapState(currentState), seed: grabSeed, playAgain };
 }
 
 export function moveUntilEnd(state, grabHouse, playerOne) {
@@ -107,26 +119,31 @@ export function moveUntilEnd(state, grabHouse, playerOne) {
     result = tmp;
   }
 
-  return result.state;
+  return result;
 }
 
-function MIN(state, depth, { a, b }) {
+function MIN(state, depth, p) {
   let holeIndex;
   let playerPoint = -INF;
   let enemyPoint = INF;
   let diff = INF;
 
   for (let i = PLAYER_POINT_INDEX + 1; i < ENEMY_POINT_INDEX; i += 1) {
-    if (depth === 0) {
-      const newState = moveUntilEnd(state, i, false);
+    if (state[i] === 0) continue;
+    if (holeIndex === undefined) holeIndex = i;
+    if (depth === 0 || !playerCanPlay(state)) {
+      const tmp = moveUntilEnd(state.slice(), i, false);
+      const newState = tmp.state;
       if (newState[PLAYER_POINT_INDEX] - newState[ENEMY_POINT_INDEX] < diff) {
         holeIndex = i;
         playerPoint = newState[PLAYER_POINT_INDEX];
         enemyPoint = newState[ENEMY_POINT_INDEX];
       }
     } else {
-      const nextState = moveUntilEnd(state, i, false);
-      const temp = MAX(nextState, depth - 1, diff, a, b);
+      const nextAiMove = moveUntilEnd(state.slice(), i, false);
+      const nextState = nextAiMove.state;
+      const { playAgain } = nextAiMove;
+      const temp = playAgain ? MIN(nextState, depth - 1, p) : MAX(nextState, depth - 1, p);
       if (temp.playerPoint - temp.enemyPoint < diff) {
         holeIndex = i;
         playerPoint = temp.playerPoint;
@@ -134,30 +151,35 @@ function MIN(state, depth, { a, b }) {
       }
     }
     diff = playerPoint - enemyPoint;
-    if (diff <= a) return diff;
-    b = Math.min(b, diff);
+    if (diff <= p.a) return { holeIndex, playerPoint, enemyPoint };
+    p.b = Math.min(p.b, diff);
   }
 
   return { holeIndex, playerPoint, enemyPoint };
 }
 
-function MAX(state, depth, { a, b }) {
+function MAX(state, depth, p) {
   let holeIndex;
   let playerPoint = -INF;
   let enemyPoint = INF;
   let diff = -INF;
 
   for (let i = PLAYER_POINT_INDEX + 1; i < ENEMY_POINT_INDEX; i += 1) {
-    if (depth === 0) {
-      const newState = moveUntilEnd(state, i, true);
+    if (state[i] === 0) continue;
+    if (holeIndex === undefined) holeIndex = i;
+    if (depth === 0 || !aiCanPlay(state)) {
+      const tmp = moveUntilEnd(state.slice(), i, true);
+      const newState = tmp.state;
       if (newState[PLAYER_POINT_INDEX] - newState[ENEMY_POINT_INDEX] > diff) {
         holeIndex = i;
         playerPoint = newState[PLAYER_POINT_INDEX];
         enemyPoint = newState[ENEMY_POINT_INDEX];
       }
     } else {
-      const nextState = moveUntilEnd(state, i, true);
-      const temp = MIN(nextState, depth - 1, diff, a, b);
+      const nextPlayerMove = moveUntilEnd(state.slice(), i, true);
+      const nextState = nextPlayerMove.state;
+      const { playAgain } = nextPlayerMove;
+      const temp = playAgain ? MAX(nextState, depth - 1, p) : MIN(nextState, depth - 1, p);
       if (temp.playerPoint - temp.enemyPoint > diff) {
         holeIndex = i;
         playerPoint = temp.playerPoint;
@@ -165,8 +187,8 @@ function MAX(state, depth, { a, b }) {
       }
     }
     diff = playerPoint - enemyPoint;
-    if (diff >= b) return diff;
-    a = Math.max(a, diff);
+    if (diff >= p.b) return { holeIndex, playerPoint, enemyPoint };
+    p.a = Math.max(p.a, diff);
   }
 
   return { holeIndex, playerPoint, enemyPoint };
@@ -175,8 +197,8 @@ function MAX(state, depth, { a, b }) {
 export function aiPlay() {
   turn = AI_MOVING;
 
-  const index = MIN(houses, 3, { a: -INF, b: INF }).holeIndex;
-  return move(houses, index, false, true, true);
+  const index = MIN(houses.slice(), 3, { a: -INF, b: INF }).holeIndex;
+  return move(houses.slice(), index, false, true, true);
 }
 
 export function play(index) {
@@ -190,7 +212,7 @@ export function play(index) {
 
   turn = PLAYER_MOVING;
 
-  return move(houses, index, true, true, false);
+  return move(houses.slice(), index, true, true, false);
 }
 
 export const getTurn = () => turn;
